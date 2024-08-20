@@ -8,10 +8,14 @@
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= render 'layouts/shim' %>
+    <%= javascript_importmap_tags %>
   </head>
   <body>
     <%= render 'layouts/header' %>
     <div class="container">
+      <% flash.each do |message_type, message| %>
+        <%= content_tag :div,message,class: "alert alert-#{message_type}" %>
+      <% end %>
       <%= yield %>
       <%= render 'layouts/footer'%>
       <%= debug(params) if Rails.env.development? %>

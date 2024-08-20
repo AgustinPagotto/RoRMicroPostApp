@@ -75,6 +75,23 @@ footer {
   padding-top: 5px;
   border-top: 1px solid $gray-light;
   color: $gray-light;
+  @media (max-width: 800px) {
+    footer {
+      small {
+        display: block;
+        float: none;
+        margin-bottom: 1em;
+      }
+      ul {
+        float: none;
+        padding: 0;
+        li {
+          float: none;
+          margin-left: 0;
+        }
+      }
+    }
+  }
 }
 footer a {
   color: $gray-light;
@@ -132,12 +149,31 @@ aside {
   margin-top: 15px;
 }
 /* forms */
-input, textarea, select, .uneditable-input {
+input,
+textarea,
+select,
+.uneditable-input {
   border: 1px solid #bbb;
-  width: 100% ;
+  width: 100%;
   margin-bottom: 15px;
   @include box_sizing;
-  }
-  input {
+}
+input {
   height: auto !important;
+}
+#error_explanation {
+  color: red;
+  ul {
+    color: red;
+    margin: 0 0 30px 0;
   }
+}
+.field_with_errors {
+  @extend .has-error;
+  .form-control {
+    color: $state-danger-text;
+  }
+}
+.dropdown-menu.active {
+  display: block;
+}
