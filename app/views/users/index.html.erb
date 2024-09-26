@@ -1,0 +1,17 @@
+<% provide(:title, 'All users') %>
+<h1>All users</h1>
+<%= will_paginate %>
+<ul class="users">
+  <% @users.each do |user| %>
+    <li>
+      <%= gravatar_for user, size: 50 %>
+      <%= link_to user.name, user %>
+    </li>
+    <li>
+      <% if current_user.admin? && !current_user?(user) %>
+        | <%= link_to "delete", user, data: { "turbo-method": :delete, turbo_confirm: "You sure?" } %>
+      <% end %>
+    <% end %>
+  </li>
+</ul>
+<%= will_paginate %>

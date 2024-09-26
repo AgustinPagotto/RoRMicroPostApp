@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   post '/login', to: 'session#create'
   delete '/logout', to: 'session#destroy'
   resources :users
+  # This will define only the edit action, that will allow us to do a get
+  resources :account_activations, only: [:edit]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
