@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :users
   # This will define only the edit action, that will allow us to do a get
   resources :account_activations, only: [:edit]
+  resources :password_resets, only: %i[new create edit update]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
