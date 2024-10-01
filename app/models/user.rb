@@ -2,6 +2,12 @@ class User < ApplicationRecord
   # Database association where one user can have many microposts
   # Destroy makes that when the user is deleted, its microposts are delted as well
   has_many :microposts, dependent: :destroy
+  # Defines the relationships being active follower-followed
+  # And passive followed-follower
+  has_many :active_relationships, class_name: 'Relationship', foreign_key: 'follower_id', dependent: :destroy
+  has_many :passive_relationships, class_name: 'Relationship', foreign_key: 'followed_id', dependent: :destroy
+  has_many :following, through: :active_relationships, source: :followed
+  has_many :followers, through: :passive_relationships, source: :follower
   attr_accessor :remember_token, :activation_token, :reset_token
 
   before_save :downcase_email
@@ -89,9 +95,29 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago
   end
 
-  # Defines a proto-feed.
+  # Returns a user's status feed.
+  # following_ids is a method from Active Record based on the has_many :following to get the ids corresponding to the user.following collection
   def feed
-    Micropost.where('user_id = ?', id)
+    following_ids = 'SELECT followed_id FROM relationships WHERE follower_id = :user_id'
+    Micropost.where("user_id IN (#{following_ids}) OR user_id = :user_id", user_id: id).includes(:user,
+                                                                                                 image_attachment: :blob)
+
+    # With the where only we pull only the micropost and not it attachments, the .includes helps mitigating this with what is called eager loading, which will retrieve the user and the image attached with the micropost
+  end
+
+  # Follows a user.
+  def follow(other_user)
+    following << other_user unless self == other_user
+  end
+
+  # Unfollows a user.
+  def unfollow(other_user)
+    following.delete(other_user)
+  end
+
+  # Returns true if the current user is following the other user.
+  def following?(other_user)
+    following.include?(other_user)
   end
 
   private

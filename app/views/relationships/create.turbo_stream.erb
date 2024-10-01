@@ -1,0 +1,7 @@
+<% #turbo_stream.update method, which takes in a CSS id and replaces the corresponding element with the result of evaluating a block of embedded Rubypassed to the method %>
+<%= turbo_stream.update "follow_form" do %>
+  <%= render partial: "users/unfollow" %>
+<% end %>
+<%= turbo_stream.update "followers" do %>
+  <%= @user.followers.count %>
+<% end %>
