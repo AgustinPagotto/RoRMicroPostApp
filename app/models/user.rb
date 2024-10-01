@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+  # Database association where one user can have many microposts
+  # Destroy makes that when the user is deleted, its microposts are delted as well
+  has_many :microposts, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
 
   before_save :downcase_email
@@ -84,6 +87,11 @@ class User < ApplicationRecord
   # Returns ture if a password reset has expired
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  # Defines a proto-feed.
+  def feed
+    Micropost.where('user_id = ?', id)
   end
 
   private

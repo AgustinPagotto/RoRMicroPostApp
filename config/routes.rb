@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   # This will define only the edit action, that will allow us to do a get
   resources :account_activations, only: [:edit]
   resources :password_resets, only: %i[new create edit update]
+  resources :microposts, only: %i[create destroy]
+  get '/microposts', to: 'static_pages#home'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

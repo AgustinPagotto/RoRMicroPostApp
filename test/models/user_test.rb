@@ -55,7 +55,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'authenticated? should return false for a user with nil digest' do
-    assert_not @user.authenticated?(:remember , '')
+    assert_not @user.authenticated?(:remember, '')
   end
 
   # exercise
@@ -64,5 +64,13 @@ class UserTest < ActiveSupport::TestCase
     @user.email = mixed_case_email
     @user.save
     assert_equal mixed_case_email.downcase, @user.reload.email
+  end
+
+  test 'associated microposts should be destroyed' do
+    @user.save
+    @user.microposts.create!(content: 'Lorem ipsum')
+    assert_difference 'Micropost.count', -1 do
+      @user.destroy
+    end
   end
 end
